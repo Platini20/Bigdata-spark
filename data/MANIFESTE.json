@@ -1,0 +1,7 @@
+{
+  "clients_rows": 12000,
+  "catalogue_rows": 800,
+  "transaction_rows_with_anomalies": 198350,
+  "seed": 6303,
+  "note": "Les types latents ne sont pas fournis aux etudiants."
+}
