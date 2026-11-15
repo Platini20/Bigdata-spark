@@ -1,0 +1,182 @@
+{
+  "features": [
+    "recency_days",
+    "frequency",
+    "amount",
+    "product_diversity"
+  ],
+  "standardisation": "StandardScaler(withMean=True, withStd=True), ajusté une seule fois",
+  "lignes_utilisees": 12000,
+  "lignes_retirees_nulles": 0,
+  "seeds": [
+    42,
+    7,
+    2026
+  ],
+  "comparaison": [
+    {
+      "k": 2,
+      "cout": 18973.5202,
+      "cout_moyen": 18973.5189,
+      "silhouette": 0.7237,
+      "silhouette_moyenne": 0.7236,
+      "silhouette_ecart_type": 0.0,
+      "ari_moyen": 0.9996,
+      "part_min_cluster": 0.2612,
+      "decision": "écarté : candidat, silhouette moyenne inférieure (0,7236 vs 0,7815)"
+    },
+    {
+      "k": 3,
+      "cout": 7594.4586,
+      "cout_moyen": 7594.4586,
+      "silhouette": 0.7815,
+      "silhouette_moyenne": 0.7815,
+      "silhouette_ecart_type": 0.0,
+      "ari_moyen": 1.0,
+      "part_min_cluster": 0.2505,
+      "decision": "retenu par la règle, remplacé après revue par K=4"
+    },
+    {
+      "k": 4,
+      "cout": 4555.9357,
+      "cout_moyen": 5331.849,
+      "silhouette": 0.7718,
+      "silhouette_moyenne": 0.7525,
+      "silhouette_ecart_type": 0.0335,
+      "ari_moyen": 0.8198,
+      "part_min_cluster": 0.0745,
+      "decision": "retenu après revue humaine (règle : écarté : candidat, silhouette moyenne inférieure (0,7525 vs 0,7815))"
+    },
+    {
+      "k": 5,
+      "cout": 4098.7635,
+      "cout_moyen": 4127.3203,
+      "silhouette": 0.7199,
+      "silhouette_moyenne": 0.7064,
+      "silhouette_ecart_type": 0.0234,
+      "ari_moyen": 0.9549,
+      "part_min_cluster": 0.065,
+      "decision": "écarté : candidat, silhouette moyenne inférieure (0,7064 vs 0,7815)"
+    },
+    {
+      "k": 6,
+      "cout": 3244.2037,
+      "cout_moyen": 3293.4694,
+      "silhouette": 0.6922,
+      "silhouette_moyenne": 0.6863,
+      "silhouette_ecart_type": 0.0225,
+      "ari_moyen": 0.8458,
+      "part_min_cluster": 0.0745,
+      "decision": "écarté : candidat, silhouette moyenne inférieure (0,6863 vs 0,7815)"
+    }
+  ],
+  "k_regle": 3,
+  "k_retenu": 4,
+  "regle_selection": "1) Candidats : ARI moyen (seed de référence vs autres seeds) >= 0,80 et plus petit cluster >= 2 % des clients pour tous les seeds. 2) Parmi les candidats, on prend la silhouette moyenne la plus haute; si un K plus petit est à moins de 0,01 de cette silhouette, on prend le plus petit K, plus facile à interpréter. 3) Sans candidat, on prend la silhouette moyenne la plus haute. 4) k_force impose un K après revue humaine des profils.",
+  "justification": "Candidats stables et équilibrés : [2, 3, 4, 5, 6]. Meilleure silhouette moyenne parmi eux : 0.7815. K=3 retenu (silhouette moyenne 0.7815, ARI moyen 1.0000, plus petit cluster 25.05%).",
+  "revue_humaine": {
+    "k_force": 4,
+    "motif": "Revue des quartiles (seed 42, K=3) : le cluster intermédiaire (5 946 clients) est bimodal en fréquence, 2 952 clients à 7-8 achats et 2 994 à 16-18 achats, un seul entre les deux. Aucun nom métier unique ne le décrit. K=4 le coupe en deux (95,9 % et 93,6 % de chaque groupe dans un cluster distinct) et garde les champions (99,8 %) et les inactifs (98,8 %) presque identiques. K=4 reste candidat selon la règle (ARI moyen >= 0,80, plus petit cluster >= 2 %)."
+  },
+  "profils": [
+    {
+      "cluster": 0,
+      "nom_propose": "Clients inactifs / à risque",
+      "effectif": 3012,
+      "part_pct": 25.1,
+      "moyenne": {
+        "recency_days": 202.4333,
+        "frequency": 5.0043,
+        "amount": 148.1933,
+        "product_diversity": 2.1019
+      },
+      "mediane": {
+        "recency_days": 196.0,
+        "frequency": 5.0,
+        "amount": 143.82,
+        "product_diversity": 2.0
+      },
+      "centre_z": {
+        "recency_days": 1.661,
+        "frequency": -0.9804,
+        "amount": -0.8219,
+        "product_diversity": -0.9019
+      }
+    },
+    {
+      "cluster": 1,
+      "nom_propose": "Clients réguliers",
+      "effectif": 2927,
+      "part_pct": 24.3917,
+      "moyenne": {
+        "recency_days": 9.2388,
+        "frequency": 17.5627,
+        "amount": 1277.2495,
+        "product_diversity": 4.4523
+      },
+      "mediane": {
+        "recency_days": 6.0,
+        "frequency": 18.0,
+        "amount": 1302.59,
+        "product_diversity": 4.0
+      },
+      "centre_z": {
+        "recency_days": -0.6561,
+        "frequency": 0.0931,
+        "amount": -0.1359,
+        "product_diversity": 0.3642
+      }
+    },
+    {
+      "cluster": 2,
+      "nom_propose": "Clients champions",
+      "effectif": 3000,
+      "part_pct": 25.0,
+      "moyenne": {
+        "recency_days": 2.4803,
+        "frequency": 34.9427,
+        "amount": 4217.9342,
+        "product_diversity": 6.0273
+      },
+      "mediane": {
+        "recency_days": 2.0,
+        "frequency": 35.0,
+        "amount": 4217.95,
+        "product_diversity": 6.0
+      },
+      "centre_z": {
+        "recency_days": -0.7372,
+        "frequency": 1.5789,
+        "amount": 1.6505,
+        "product_diversity": 1.2125
+      }
+    },
+    {
+      "cluster": 3,
+      "nom_propose": "Acheteurs occasionnels",
+      "effectif": 3061,
+      "part_pct": 25.5083,
+      "moyenne": {
+        "recency_days": 40.2179,
+        "frequency": 8.6148,
+        "amount": 383.4388,
+        "product_diversity": 2.5711
+      },
+      "mediane": {
+        "recency_days": 35.0,
+        "frequency": 8.0,
+        "amount": 320.87,
+        "product_diversity": 3.0
+      },
+      "centre_z": {
+        "recency_days": -0.2846,
+        "frequency": -0.6718,
+        "amount": -0.6789,
+        "product_diversity": -0.6492
+      }
+    }
+  ],
+  "noms_metier": "Propositions générées par règles sur les centres en z-scores (seuil ±0.5 écart-type); à valider en lisant les profils.",
+  "pourquoi_pas_le_cout_seul": "Le coût (somme des distances au carré aux centres) diminue presque toujours quand K augmente, jusqu'à 0 avec un cluster par client : il favorise mécaniquement le plus grand K. Il faut donc le combiner à une mesure de séparation (silhouette), à la stabilité entre seeds et à l'interprétabilité métier.",
+  "duree_secondes": 158.31
+}

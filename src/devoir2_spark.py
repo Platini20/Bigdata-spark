@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import argparse
 import json
@@ -11,6 +11,10 @@ from pyspark.ml.feature import StandardScaler, VectorAssembler
 from pyspark.ml.recommendation import ALS
 from pyspark.sql import SparkSession, Window
 from pyspark.sql import functions as F
+# Modules dÃ©veloppÃ©s par les membres du groupe
+from analyse_sql import construire_rfm
+from segmentation import segmenter
+from als_recommandation import recommander
 
 
 def arguments():
@@ -23,15 +27,15 @@ def arguments():
 
 
 def charger_et_nettoyer(spark, partitions):
-    """P1 - Lecture, validation, nettoyage et contrôle des trois sources.
+    """P1 - Lecture, validation, nettoyage et contrÃ´le des trois sources.
 
     Contrat de sortie :
       transactions(transaction_id, client_id, produit_id,
                    date_transaction, quantite, prix_unitaire)
       clients(client_id, region, date_inscription)
       catalogue(produit_id, categorie, marque)
-    Les identifiants client et produit restent numériques pour les jointures
-    et pour ALS. Les fichiers CSV sources ne sont jamais modifiés.
+    Les identifiants client et produit restent numÃ©riques pour les jointures
+    et pour ALS. Les fichiers CSV sources ne sont jamais modifiÃ©s.
     """
     from pyspark.sql.types import (StructType, StructField, StringType,
                                    IntegerType, DoubleType, DateType)
@@ -155,33 +159,6 @@ def charger_et_nettoyer(spark, partitions):
 
 
 
-
-
-
-def construire_rfm(transactions, catalogue):
-    """TODO 2 - Jointure et agregations Spark SQL/DataFrame.
-    Produire: client_id, recency_days, frequency, amount, product_diversity.
-    Date de reference imposee: 2026-11-01.
-    """
-    raise NotImplementedError("TODO 2")
-
-
-def segmenter(rfm):
-    """TODO 3 - Assembler, standardiser, comparer K=2..6 avec silhouette,
-    choisir K et profiler les clusters sur les variables originales.
-    Retourner un dictionnaire serialisable.
-    """
-    raise NotImplementedError("TODO 3")
-
-
-def recommander(transactions, top_k=10):
-    """TODO 4 - Construire les triplets implicites, separer entrainement/test,
-    entrainer ALS, retirer les articles deja vus et calculer Recall@10.
-    Gerer le cold start et retourner un dictionnaire serialisable.
-    """
-    raise NotImplementedError("TODO 4")
-
-
 def main():
     args = arguments()
     spark = (SparkSession.builder.appName(f"INF6303-Devoir2-{args.workers}-workers")
@@ -190,9 +167,23 @@ def main():
     started = time.perf_counter()
     transactions, clients, catalogue = charger_et_nettoyer(spark, args.partitions)
     rfm = construire_rfm(transactions, catalogue)
-    # TODO 5 - Afficher explain("formatted") sur au moins un plan pertinent.
+
+    # P5 - Analyse du plan physique d'exÃ©cution Spark
+    print("\n" + "=" * 60)
+    print("PLAN D'EXECUTION SPARK - CONSTRUCTION RFM")
+    print("=" * 60)
+
+    rfm.explain(mode="formatted")
+
+    print("=" * 60)
+    print("FIN DU PLAN D'EXECUTION")
+    print("=" * 60 + "\n")
+
     kmeans_result = segmenter(rfm)
-    als_result = recommander(transactions, top_k=10)
+    als_result = recommander(
+        transactions,
+        top_k=10
+    )
     result = {
         "environment": {"master": spark.sparkContext.master, "spark_version": spark.version,
                         "workers": args.workers, "default_parallelism": spark.sparkContext.defaultParallelism,
@@ -211,3 +202,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
