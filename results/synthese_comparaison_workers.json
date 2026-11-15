@@ -1,0 +1,25 @@
+﻿{
+    "projet":  "INF6303 - Devoir 2 Spark",
+    "experimentation":  "Comparaison 1 worker vs 3 workers",
+    "donnees":  {
+                    "transactions":  197677,
+                    "catalogue":  800,
+                    "clients":  12000
+                },
+    "performances":  {
+                         "speedup":  0.9253,
+                         "duree_3_workers":  297.553,
+                         "duree_1_worker":  275.315,
+                         "efficacite_parallele_pct":  30.84,
+                         "variation_duree_pct":  8.08
+                     },
+    "segmentation":  {
+                         "k_1_worker":  4,
+                         "k_3_workers":  4
+                     },
+    "recommandation":  {
+                           "meilleure_configuration":  "A_rank10",
+                           "recall_1_worker":  0.081404,
+                           "recall_3_workers":  0.081404
+                       }
+}

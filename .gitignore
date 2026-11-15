@@ -1,0 +1,24 @@
+﻿# Python - fichiers temporaires
+__pycache__/
+*.pyc
+*.pyo
+
+# Environnements virtuels
+.venv/
+venv/
+
+# Sauvegardes locales
+*_backup.py
+
+# Fichiers temporaires
+*.tmp
+*.log
+
+# Configuration locale
+.env
+
+# Archives locales
+archives_locales/
+
+# Sauvegardes des expérimentations
+results/sauvegardes/
